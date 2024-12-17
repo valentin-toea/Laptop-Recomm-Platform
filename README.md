@@ -1,5 +1,5 @@
-# Mantine Next Template
+# Run Steps
 
-Get started with the template by clicking `Use this template` button on the top of the page.
-
-[Documentation](https://mantine.dev/guides/next/)
+- npm i
+- create .env file with credentials for Recombee
+- npm run dev
