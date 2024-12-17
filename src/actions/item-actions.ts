@@ -27,7 +27,6 @@ export const getSimilarItems = async (
   itemId: string,
   userId: string | undefined
 ) => {
-  console.log("salut", userId);
   const items = await client.send(
     new rqs.RecommendItemsToItem(itemId, userId ?? "None", 10, {
       returnProperties: true,
