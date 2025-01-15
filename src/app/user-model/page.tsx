@@ -18,14 +18,12 @@ const page = () => {
     const getData = async () => {
       const p = await calculatePreferredBrandFromDetailViews(userId);
       setPref(p);
-      console.log(userId);
       const f = await calculatePurchaseFrequency(userId);
       setFreq(f);
     };
     getData();
-  }, []);
+  }, [userId]);
 
-  console.log(mainUser);
   return (
     <Stack>
       {freq === undefined || pref.preferredBrand === undefined ? (
@@ -34,8 +32,11 @@ const page = () => {
         <>
           <h2>Preferred Brand: {pref.preferredBrand}</h2>
           <h2>Preferred CPU: {pref.preferredCPU}</h2>
+          <h2>Preferred GPU: {pref.preferredGPU}</h2>
+          <h2>Preferred Storage Size: {pref.preferredStorage} GB</h2>
           <h2>
-            Preferred Screen Size: {Number(pref.preferredScreen).toFixed(1)}
+            Preferred Screen Size: {Number(pref.preferredScreen).toFixed(1)}{" "}
+            inch
           </h2>
           <h2>Purchases per day: {freq}</h2>
         </>

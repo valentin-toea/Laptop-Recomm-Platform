@@ -50,7 +50,7 @@ const UserDropdown = () => {
         onClose={() => setOpenModal(false)}
         title="Select User"
       >
-        <Container mah="600px" mb={20} style={{ overflow: "auto" }}>
+        <Container mah="500px" mb={20} style={{ overflow: "auto" }}>
           <Radio.Group onChange={(value) => (selectedUserId.current = value)}>
             <Stack gap={6}>
               {users.map((user) => (
