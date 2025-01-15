@@ -3,6 +3,7 @@ import {
   ActionIcon,
   Button,
   Container,
+  Flex,
   Group,
   Menu,
   Modal,
@@ -16,13 +17,16 @@ import { useUserData } from "../hooks/useUserData";
 import Link from "next/link";
 
 const UserDropdown = () => {
-  const { mainUser, users, changeUser } = useUserData({ loadAllUsers: true });
+  const { mainUser, users, changeUser, addUser, refreshUsers } = useUserData({
+    loadAllUsers: true,
+  });
 
   const [openModal, setOpenModal] = useState(false);
   const selectedUserId = useRef<string>();
 
   return (
     <Group gap={10}>
+      <p>{mainUser?.name || ""}</p>
       <Menu shadow="md" width={200}>
         <Menu.Target>
           <ActionIcon variant="filled" aria-label="User" radius="lg">
@@ -59,17 +63,25 @@ const UserDropdown = () => {
             </Stack>
           </Radio.Group>
         </Container>
-        <Button
-          fullWidth
-          onClick={() => {
-            if (!selectedUserId.current) return;
+        <Flex gap={10} direction="column">
+          <Button
+            fullWidth
+            onClick={() => {
+              if (!selectedUserId.current) return;
 
-            changeUser(selectedUserId.current);
-            setOpenModal(false);
-          }}
-        >
-          Switch To Selected User
-        </Button>
+              changeUser(selectedUserId.current);
+              setOpenModal(false);
+            }}
+          >
+            Switch To Selected User
+          </Button>
+          <Button fullWidth onClick={() => addUser()}>
+            Create Fresh User
+          </Button>
+          <Button fullWidth onClick={() => refreshUsers()}>
+            Refresh User List
+          </Button>
+        </Flex>
       </Modal>
       <ActionIcon
         variant="filled"

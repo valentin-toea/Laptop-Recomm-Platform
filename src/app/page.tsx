@@ -1,5 +1,6 @@
 import { Stack, Text } from "@mantine/core";
 import UserRecommendedItems from "../components/UserRecommendedItems";
+import Categories from "../components/Categories";
 
 export default function HomePage() {
   return (
@@ -8,9 +9,10 @@ export default function HomePage() {
         Recommended Laptops For You
       </Text>
       <UserRecommendedItems />
-      <Text size="lg" fw={700}>
-        Laptops
+      <Text size="xl" fw={700}>
+        Categories
       </Text>
+      <Categories />
     </Stack>
   );
 }

@@ -1,11 +1,64 @@
-import React from "react";
-import { getItemDetails } from "../../../actions/item-actions";
-import { Badge, Button, Group, Image, Stack, Text } from "@mantine/core";
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+  getItemDetails,
+  markLaptopAsBookmark,
+  markLaptopAsPurchased,
+  markLaptopAsViewed,
+} from "../../../actions/item-actions";
+import { Badge, Button, Flex, Group, Image, Stack, Text } from "@mantine/core";
 import SimilarItems from "../../../components/SimilarItems";
+import { useParams } from "next/navigation";
+import { Laptop } from "../../../types";
+import { useUserData } from "../../../hooks/useUserData";
+import { notifications } from "@mantine/notifications";
 
-const page = async ({ params }: { params: Promise<{ productId: string }> }) => {
-  const productId = (await params).productId;
-  const laptop = await getItemDetails(productId);
+const page = () => {
+  const { productId } = useParams();
+  const [laptop, setLaptop] = useState<Laptop>();
+  const { mainUser } = useUserData();
+
+  async function buyLaptop() {
+    try {
+      await markLaptopAsPurchased(mainUser.userId, productId as string);
+      notifications.show({
+        title: "",
+        message: "Product purchased succesfully! 🌟",
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Error",
+        message: "Error purchasing item",
+      });
+    }
+  }
+
+  async function bookmarkLaptop() {
+    try {
+      await markLaptopAsBookmark(mainUser.userId, productId as string);
+      notifications.show({
+        title: "Bookmark",
+        message: "Product bookmarked succesfully! 🌟",
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Error",
+        message: "Error bookmarking item",
+      });
+    }
+  }
+
+  useEffect(() => {
+    async function getData() {
+      if (!productId) return;
+      const data = await getItemDetails(productId as string);
+      setLaptop(data);
+    }
+    markLaptopAsViewed(mainUser.userId, productId as string);
+    getData();
+  }, []);
+
+  if (!laptop) return <p></p>;
 
   return (
     <Stack>
@@ -34,14 +87,22 @@ const page = async ({ params }: { params: Promise<{ productId: string }> }) => {
               {laptop.status}
             </Badge>
           </Group>
-          <Button maw={150}>Buy</Button>
+          <Flex direction="row" gap={20}>
+            <Button miw={150} onClick={() => buyLaptop()}>
+              Buy
+            </Button>
+            <Button color="orange" miw={150} onClick={() => bookmarkLaptop()}>
+              Bookmark
+            </Button>
+          </Flex>
         </Stack>
       </Group>
       <Stack>
-        <Text size="lg" fw={700}>
-          Similar Laptops
-        </Text>
-        <SimilarItems itemId={laptop.productId} userPersonalised />
+        <SimilarItems
+          itemId={laptop.productId}
+          itemPrice={laptop.finalPrice}
+          userPersonalised
+        />
       </Stack>
     </Stack>
   );

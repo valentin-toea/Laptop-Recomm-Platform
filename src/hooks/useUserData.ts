@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../actions/user-actions";
+import { createNewUser, getAllUsers } from "../actions/user-actions";
 import { RecombeeUser } from "../types";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
@@ -22,6 +22,18 @@ export const useUserData = (
     setMainUser(foundUser);
   };
 
+  const addUser = async () => {
+    await createNewUser(users.length);
+
+    const requestedUsers = await getAllUsers();
+    setUsers(requestedUsers);
+  };
+
+  const refreshUsers = async () => {
+    const requestedUsers = await getAllUsers();
+    setUsers(requestedUsers);
+  };
+
   useEffect(() => {
     (async () => {
       let requestedUsers: RecombeeUser[] = [];
@@ -37,5 +49,5 @@ export const useUserData = (
     })();
   }, []);
 
-  return { mainUser, users, changeUser };
+  return { mainUser, users, changeUser, addUser, refreshUsers };
 };

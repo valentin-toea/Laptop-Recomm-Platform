@@ -1,8 +1,14 @@
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import React from "react";
-import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
+import {
+  ColorSchemeScript,
+  mantineHtmlProps,
+  MantineProvider,
+} from "@mantine/core";
 import MainLayout from "../components/MainLayout";
+import "@mantine/notifications/styles.css";
+import { Notifications } from "@mantine/notifications";
 
 export const metadata = {
   title: "Emag Recomm",
@@ -21,7 +27,10 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MainLayout>{children}</MainLayout>
+        <MantineProvider>
+          <Notifications />
+          <MainLayout>{children}</MainLayout>
+        </MantineProvider>
       </body>
     </html>
   );
